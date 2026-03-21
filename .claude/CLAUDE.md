@@ -34,6 +34,15 @@ Recommended flow for new projects:
 
 **Parallel implementation flow** (advanced): While the user answers `/interview` questions, spin out background worktree agents to implement upcoming phases. Merge completed phases back to main, then teach as they land. This lets the user learn and build simultaneously.
 
+**For existing codebases**, use `/enhance-project` instead. It audits the codebase, compares it against requirements, discusses priorities, and creates a gap-driven plan:
+```
+/enhance-project → (Audit, Gaps, Discussion, Plan) → /implement → /teach-implement → /interview → /review → /teach → /test-qa → /teach → /ship → /teach
+```
+
+Standalone commands for the enhance flow:
+- `/audit` — Analyze an existing codebase (technology, features, quality)
+- `/gaps` — Compare PRD requirements against audited codebase
+
 ---
 
 ## 2. Main Entry Point
@@ -81,6 +90,8 @@ The artifacts are:
 | `ENV_SETUP.md` | /ship |
 | `DEPLOYMENT.md` | /ship |
 | `RELEASE.md` | /ship |
+| `CODEBASE_AUDIT.md` | /audit, /enhance-project |
+| `GAP_ANALYSIS.md` | /gaps, /enhance-project |
 | `LEARNING_NOTES.md` | /teach, /teach-implement |
 
 **These artifacts are the source of truth for the workflow.** Always read the relevant artifacts before starting any phase. Update the Status field when you complete a phase. Never delete artifact content — append or update sections.
