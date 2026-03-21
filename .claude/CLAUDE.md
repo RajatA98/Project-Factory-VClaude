@@ -22,14 +22,17 @@ The pipeline has 9 phases, always in this order:
 8. **Test-QA** (`/test-qa`) — Evaluate test coverage and quality
 9. **Ship** (`/ship`) — Prepare environment, deployment, and release
 
-Two teaching commands can be used at any time:
+Three learning commands can be used at any time:
 - `/teach` — Explain the current or most recent phase
-- `/teach-implement` — Explain code and implementation details
+- `/teach-implement` — Explain code and implementation details (interview-level depth, systems thinking)
+- `/interview` — Mock interview with 3 questions based on what was just built, with feedback
 
 Recommended flow for new projects:
 ```
-/start-project → (guides through Understand, PRD, Presearch, Decide, Plan with teaching and approval at each step) → /implement → /teach-implement → /review → /teach → /test-qa → /teach → /ship → /teach
+/start-project → (Understand, PRD, Presearch, Decide, Plan) → /implement → /teach-implement → /interview → /review → /teach → /test-qa → /teach → /ship → /teach
 ```
+
+**Parallel implementation flow** (advanced): While the user answers `/interview` questions, spin out background worktree agents to implement upcoming phases. Merge completed phases back to main, then teach as they land. This lets the user learn and build simultaneously.
 
 ---
 
@@ -57,10 +60,10 @@ Recommended flow for new projects:
 
 ## 4. Artifact Rules
 
-All pipeline outputs are written to:
+All pipeline outputs are written to `factory/artifacts/` **relative to the current working directory** (the project you are working in). Create this directory if it does not exist.
 
 ```
-factory/artifacts/
+./factory/artifacts/
 ```
 
 The artifacts are:

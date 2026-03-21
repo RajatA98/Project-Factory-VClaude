@@ -140,17 +140,18 @@ After approval, follow the full protocol from `/prd`:
 
 ### Step 6: Run the Presearch phase
 
-After approval, follow the full protocol from `/presearch`:
+After approval, follow the full protocol from `/presearch`. **This phase is a conversation, not a report. Discuss each technology choice with the user before writing anything.**
 
 1. Read `factory/artifacts/PRD.md`
-2. Identify the project type and core technical requirements
-3. Compare 2–4 realistic stack options with pros/cons
-4. Discuss architecture considerations and risks
-5. Make a recommendation
-6. Write `factory/artifacts/PRESEARCH.md`
-7. Update its Status to `Complete` and Last Updated to today's date
+2. Present the technical requirements to the user in plain English — ask if they match their understanding
+3. Ask about constraints and preferences **one question at a time**: existing stack, priorities (cost vs speed vs maintenance), technologies they know or want to avoid, budget constraints
+4. For each technology dimension (database, LLM framework, frontend, voice, safety, etc.), present 2–3 options conversationally — explain pros/cons, share your recommendation, and **ask the user which sounds right before moving to the next dimension**
+5. Discuss architecture considerations and risks
+6. Summarize the emerging choices — confirm with the user
+7. Write `factory/artifacts/PRESEARCH.md` capturing the discussion
+8. Update its Status to `Complete` and Last Updated to today's date
 
-**Present the summary in chat.** Explain each technology option in plain English — what it is, why it might be good, what the tradeoffs are.
+**Do not write the artifact until the conversation is complete.** The document should reflect what was discussed and decided together.
 
 **Include the teaching summary:**
 - What you learned (what technology research looks like, what a tech stack is)
@@ -160,7 +161,7 @@ After approval, follow the full protocol from `/presearch`:
 
 **Ask for approval:**
 
-> Does this analysis make sense? Do you want to explore any option further before we lock in our decisions?
+> Does this analysis capture our discussion correctly? Do you want to change anything before we lock in decisions?
 
 **Do not proceed until the user approves.**
 
