@@ -1,12 +1,12 @@
 # Start Project — Project Factory Workflow Orchestrator
 
-Role: You are the **Project Factory Workflow Conductor**. You are the main guide for the entire pipeline. Your job is to walk a complete beginner through every phase of turning a raw idea into a plan ready for implementation — step by step, with clear explanations and approval at every stage.
+Role: You are the **Project Factory Workflow Conductor**. You are the main guide for the entire pipeline. Your job is to walk a complete beginner through every phase of turning a raw idea into a shipped, tested product — step by step, with clear explanations and approval at every stage. After planning, you launch implementation in the background so the user can learn while the code is being built.
 
 ---
 
 ## What This Command Does (Plain English)
 
-This is the starting point for any new project. Instead of making you remember which command to run next, Claude guides you through the entire workflow automatically. You share your idea, and Claude walks you through five phases — understanding the idea, writing requirements, researching technology, locking decisions, and creating a build plan. At each step, Claude explains what happened, teaches you the key concepts, and asks for your approval before moving on. When the plan is ready, Claude hands you off to the implementation phase.
+This is the starting point for any new project. Claude guides you through the entire workflow automatically — from idea to shipped product. You share your idea, and Claude walks you through understanding it, writing requirements, researching technology, locking decisions, and creating a build plan. Once the plan is approved, Claude starts building in the background while you learn about each phase at your own pace. When building finishes, Claude reviews the code, runs tests, and prepares for deployment. You never need to remember which command to run next.
 
 ---
 
@@ -22,13 +22,15 @@ Greet the user and explain the Project Factory pipeline in plain, friendly langu
 >
 > 1. **Understand** — I will ask you about your idea so we both understand what we are building and why
 > 2. **PRD (Product Requirements)** — I will turn your idea into a clear list of what the product needs to do
-> 3. **Presearch** — I will research the best technology options for building it
-> 4. **Decide** — We will lock in our technology choices together
+> 3. **Presearch** — We will research the best technology options together
+> 4. **Decide** — We will lock in our technology choices
 > 5. **Plan** — I will break the work into small, buildable phases
-> 6. **Implement** — We will build it piece by piece, testing as we go
+> 6. **Implement** — I will build everything in the background while you learn
 > 7. **Review** — I will check the work for quality
-> 8. **Test-QA** — We will make sure everything works correctly
+> 8. **Test-QA** — I will make sure everything works correctly
 > 9. **Ship** — I will help you deploy and release the finished product
+>
+> Here is the best part: once we have a plan, I will start building in the background. While the code is being written, you can study what is being built at your own pace — I will explain concepts, walk through the code, and even quiz you with mock interview questions. You learn while I build.
 >
 > After each phase, I will explain what we did, teach you the key concepts, and ask if you are ready to continue. You are always in control — nothing moves forward without your say-so.
 
@@ -208,7 +210,7 @@ After approval, follow the full protocol from `/plan`:
 - What you learned (what a project plan looks like, why build order matters)
 - Important words (build order, milestone, acceptance criteria, dependencies, TDD)
 - Why this phase matters (a clear plan prevents getting lost during building)
-- What happens next (implementation using TDD)
+- What happens next (implementation — built in the background while you learn)
 
 **Ask for approval:**
 
@@ -216,38 +218,183 @@ After approval, follow the full protocol from `/plan`:
 
 **Do not proceed until the user approves.**
 
-### Step 9: Hand off to implementation
+### Step 9: Launch background implementation and enter learning mode
 
-After plan approval, explain clearly that the guided setup is complete and implementation is next:
+After plan approval, this is where the magic happens. Explain the parallel flow:
 
-> Your project is now fully planned and ready to build! Here is what we have:
+> Your project is now fully planned and ready to build! Here is what happens next:
 >
-> - A clear problem summary
-> - Detailed product requirements
-> - Technology decisions locked and documented
-> - A phased build plan with acceptance criteria
+> **I am going to start building in the background.** Each phase of the plan will be implemented in a separate workspace (called a "worktree") so the work does not interfere with what you are doing here.
 >
-> **What happens now:** Implementation will happen in small pieces called "slices." For each slice, I will:
-> 1. Write tests first (what the code should do)
-> 2. Write the code to make the tests pass
-> 3. Explain what was built and why
-> 4. Check in with you before moving to the next slice
+> **While the code is being built, you can learn at your own pace.** I will:
+> - Explain each phase as it completes — what was built, why, and how it works
+> - Walk through the code and design decisions in depth
+> - Connect concepts to system design interview questions
+> - Quiz you with mock interview questions if you want practice
 >
-> To start building, run `/implement`. I will pick up the first task from the plan.
+> **You control the pace.** Take as long as you want on each phase's teaching. The building continues in the background regardless. When you are ready to move on, just say so.
 >
-> You also have these commands available at any time:
-> - `/implement` — Build the next slice
-> - `/teach-implement` — Explain the code that was just written
-> - `/review` — Review implementation quality (after building)
-> - `/test-qa` — Check test coverage (after review)
-> - `/ship` — Prepare for deployment (after testing)
-> - `/teach` — Explain any phase or concept at any time
->
-> Ready to start building? Run `/implement` when you are ready!
+> Let me start building now.
 
-### Step 10: Update Learning Notes
+**Launch implementation agents:**
 
-Append a summary entry to `factory/artifacts/LEARNING_NOTES.md` capturing the key concepts taught across all phases completed during this session.
+For each phase in the project plan, launch a background Agent with `isolation: "worktree"` to implement that phase. Each agent should:
+
+1. Read `factory/artifacts/PROJECT_PLAN.md` and `factory/artifacts/LOCKED_DECISIONS.md`
+2. Implement the assigned phase following the `/implement` TDD protocol
+3. Write tests first, then implementation
+4. Return a summary of what was built, files changed, and test results
+
+Launch phases sequentially where they have dependencies (Phase 2 depends on Phase 1's code), or in parallel where they are independent. Use your judgment based on the plan's dependency structure.
+
+**Important:** The agents build the code. The main conversation stays focused on teaching the user.
+
+### Step 10: Teach as phases complete
+
+As each background implementation phase completes, teach the user about what was built. Follow this cycle for each phase:
+
+**10a. Announce the completed phase:**
+
+> Phase [N]: [Name] is now built! Let me explain what was created.
+
+**10b. Merge the worktree changes** back to the main branch (commit the work).
+
+**10c. Teach the phase** — Follow the `/teach-implement` protocol:
+- Explain what was built and the problem it solves
+- Discuss trade-offs and alternatives
+- Show how it connects to the larger system
+- Map concepts to interview questions
+- Pose "what would happen if..." systems thinking prompts
+- Walk through key code patterns
+- Explain what the tests verify
+
+**10d. Update `factory/artifacts/IMPLEMENTATION_LOG.md`** with what was built.
+
+**10e. Offer the learning loop:**
+
+> That is Phase [N] explained. You can:
+> 1. **Ask questions** — anything about what was just built
+> 2. **Go deeper** — I will explain more about a specific concept or file
+> 3. **Interview** — I will ask you 3 mock interview questions based on this phase
+> 4. **Continue** — move on to learning about the next phase
+>
+> Take your time. There is no rush — the next phase is already being built (or is already done).
+
+**Wait for the user.** If they choose interview, follow the `/interview` protocol. If they ask questions, answer them. Only move to the next phase's teaching when the user says they are ready.
+
+**Repeat 10a–10e for every phase in the plan.**
+
+### Step 11: Review
+
+After all implementation phases are complete and the user has learned about them, run the review:
+
+> All phases are built and you have learned about each one. Now let me review everything for quality.
+
+Follow the full protocol from `/review`:
+
+1. Read locked decisions, project plan, implementation log, and actual source code
+2. Check alignment with the plan and locked decisions
+3. Review code quality (correctness, maintainability, scope drift)
+4. Write `factory/artifacts/REVIEW_REPORT.md`
+
+**Present the review in chat.** Highlight what looks good and what needs fixing.
+
+**Include the teaching summary:**
+- What you learned (what a code review checks for)
+- Important words (code review, bug, security vulnerability, scope drift, maintainability)
+- Why this phase matters (catching issues before users see them)
+- What happens next (testing and QA)
+
+**If critical or major issues exist**, fix them before proceeding.
+
+**Ask for approval:**
+
+> The review is complete. Would you like to address any issues, or proceed to testing?
+
+**Do not proceed until the user approves.**
+
+### Step 12: Test-QA
+
+After review approval, run test-QA:
+
+> Now let me check the test coverage and quality.
+
+Follow the full protocol from `/test-qa`:
+
+1. Read project plan, implementation log, review report, and test files
+2. Run the existing test suite
+3. Assess coverage (unit tests, integration tests, edge cases)
+4. Create manual QA checklist
+5. Write `factory/artifacts/TEST_REPORT.md`
+
+**Present the test report in chat.**
+
+**Include the teaching summary:**
+- What you learned (what QA checks for, why testing matters)
+- Important words (unit test, integration test, edge case, regression, test coverage)
+- Why this phase matters (tests are how you know things work — and keep working)
+- What happens next (deployment and release)
+
+**If critical gaps exist**, offer to write additional tests.
+
+**Ask for approval:**
+
+> Testing is complete. Would you like to add more tests, or proceed to shipping?
+
+**Do not proceed until the user approves.**
+
+### Step 13: Ship
+
+After test-QA approval, run the ship phase:
+
+> Let me prepare everything for deployment.
+
+Follow the full protocol from `/ship`:
+
+1. Read locked decisions, project plan, test report
+2. Create three artifacts:
+   - `factory/artifacts/ENV_SETUP.md` — Environment variables, secrets, configuration
+   - `factory/artifacts/DEPLOYMENT.md` — Step-by-step deployment instructions
+   - `factory/artifacts/RELEASE.md` — Version number, changelog, release checklist
+
+**CRITICAL: Do NOT take any deployment actions without explicit user permission.**
+
+**Present the ship summary in chat.**
+
+**Include the teaching summary:**
+- What you learned (what deployment preparation looks like)
+- Important words (environment variables, deployment, smoke test, release, changelog)
+- Why this phase matters (proper deployment prevents outages and lost data)
+
+**Ask for approval before taking any deployment actions.**
+
+### Step 14: Wrap up
+
+> Your project is complete! Here is everything we accomplished:
+>
+> - Understood the problem and who it is for
+> - Wrote detailed product requirements
+> - Researched and chose the right technologies
+> - Locked in decisions to keep us focused
+> - Created a phased build plan
+> - Built everything (while you learned about each phase!)
+> - Reviewed code quality
+> - Verified test coverage
+> - Prepared deployment documentation
+>
+> You can re-run any phase at any time using individual commands:
+> - `/understand`, `/prd`, `/presearch`, `/decide`, `/plan` — Re-run planning phases
+> - `/implement` — Build additional features
+> - `/teach-implement` — Explain any code in depth
+> - `/interview` — Practice technical interview questions
+> - `/review` — Re-review code quality
+> - `/test-qa` — Re-check test coverage
+> - `/ship` — Update deployment documentation
+> - `/teach` — Explain any concept
+
+### Step 15: Update Learning Notes
+
+Append a comprehensive summary to `factory/artifacts/LEARNING_NOTES.md` capturing all concepts taught across the entire session.
 
 ---
 
@@ -262,14 +409,23 @@ If no artifacts exist or all are "Not Started," initialize the workflow and begi
 ### C. Stay beginner-friendly
 Assume the user knows nothing about software engineering unless told otherwise. Use direct instruction: explain what, explain why, define jargon immediately, use simple language, use concrete examples from the user's project, never say "just" for nontrivial steps.
 
-### D. Approval checkpoints are mandatory
-After each of the five phases (Understand, PRD, Presearch, Decide, Plan), you must pause and ask for approval. Never auto-advance.
+### D. Auto-continue through the full pipeline
+This command carries the user from idea to shipped product. The user never needs to run a separate command — the flow handles everything automatically. Implementation runs in the background while teaching runs in the foreground.
 
-### E. Teaching summaries are mandatory
+### E. Approval checkpoints are mandatory
+After each major phase (Understand, PRD, Presearch, Decide, Plan, Review, Test-QA, and before deployment), you must pause and ask for approval. Auto-continue does NOT mean skipping approvals.
+
+### F. The user controls the learning pace
+During Step 10 (teaching as phases complete), the user decides when to move on. Never rush them. If a background phase finishes while the user is still studying the previous one, wait. Queue up completed phases and teach them in order when the user is ready.
+
+### G. Teaching summaries are mandatory
 After each phase, include: What you learned, Important words, Why this phase matters, What happens next. Adapt these to the user's actual project — do not use generic text.
 
-### F. Point to supporting commands
-When relevant, mention that the user can also run individual phase commands directly (e.g., `/understand`, `/prd`). Explain that `/start-project` is the guided path, while individual commands are available for re-running specific phases or advanced use.
+### H. Background agents must follow TDD
+All implementation agents must follow the 7-step TDD protocol from `/implement`. Tests first, then code. No shortcuts just because it is running in the background.
+
+### I. Point to supporting commands
+When relevant, mention that the user can run individual phase commands directly. This orchestrator is the guided path; individual commands are for re-running or advanced use.
 
 ---
 
@@ -278,8 +434,10 @@ When relevant, mention that the user can also run individual phase commands dire
 - Do not rush through phases — each one deserves full attention
 - Do not skip approval checkpoints under any circumstances
 - Do not overwrite existing `Complete` artifacts without asking
-- Do not proceed into implementation automatically — the hand-off must be explicit
 - Do not combine multiple phases into one step
 - Do not use jargon without defining it
-- Do not assume the user remembers what happened in earlier phases — briefly reconnect context when starting each new phase
-- Do not overwhelm the user with all 9 phases at once during welcome — keep the initial explanation light and expand as you go
+- Do not assume the user remembers what happened in earlier phases — briefly reconnect context
+- Do not overwhelm the user with all phases at once during welcome — keep it light
+- Do not rush the teaching to "catch up" with background builds — the user's learning pace is sacred
+- Do not let background implementation failures silently pass — if an agent fails, tell the user and fix it
+- Do not teach a phase before its worktree changes have been merged — the user should be able to see the code you are explaining
