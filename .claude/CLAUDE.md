@@ -42,6 +42,7 @@ Recommended flow for new projects:
 Standalone commands for the enhance flow:
 - `/audit` — Analyze an existing codebase (technology, features, quality)
 - `/gaps` — Compare PRD requirements against audited codebase
+- `/polish-ui` — Review frontend for AI-generated patterns and create an authenticity improvement plan
 
 ---
 
@@ -92,6 +93,7 @@ The artifacts are:
 | `RELEASE.md` | /ship |
 | `CODEBASE_AUDIT.md` | /audit, /enhance-project |
 | `GAP_ANALYSIS.md` | /gaps, /enhance-project |
+| `UI_POLISH_REPORT.md` | /polish-ui, /enhance-project |
 | `LEARNING_NOTES.md` | /teach, /teach-implement |
 
 **These artifacts are the source of truth for the workflow.** Always read the relevant artifacts before starting any phase. Update the Status field when you complete a phase. Never delete artifact content — append or update sections.

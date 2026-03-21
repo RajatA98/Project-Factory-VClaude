@@ -23,9 +23,10 @@ Greet the user and explain that this flow is designed for existing codebases. Sa
 > 1. **Collect Requirements** — You share what the product should do (a PRD, feature list, or description)
 > 2. **Audit** — I will read your codebase and document what is already built, what technologies are used, and what shape it is in
 > 3. **Gap Analysis** — I will compare your requirements against the codebase and identify what is missing, what is partial, and what is already done
-> 4. **Discussion** — We will talk through priorities, decide what to tackle first, and agree on scope
-> 5. **Plan** — I will create a build plan based on the gaps we need to close
-> 6. **Implement** — We will build it piece by piece, just like the standard pipeline
+> 4. **UI Polish Review** — If the project has a frontend, I will review it for AI-generated patterns and create a plan to make it look authentic and professional
+> 5. **Discussion** — We will talk through priorities (including UI fixes), decide what to tackle first, and agree on scope
+> 6. **Plan** — I will create a build plan based on the gaps we need to close
+> 7. **Implement** — We will build it piece by piece, just like the standard pipeline
 >
 > After each step, I will explain what we found, teach you the key concepts, and ask if you are ready to continue. You are always in control.
 
@@ -155,12 +156,50 @@ Adapt the teaching summary to the user's actual project.
 
 **Do not proceed until the user approves.**
 
-### Step 6: Discussion phase
+### Step 6: Run the UI Polish review (if frontend exists)
 
-This is a back-and-forth conversation about priorities. Guide the user through the following topics **one at a time**. Do not dump all topics at once.
+**Skip this step if the codebase has no frontend or UI components.** If the audit identified a frontend (web app, mobile app, or any user-facing interface), run the UI polish review.
+
+Follow the full protocol from `/polish-ui`:
+
+1. Read the frontend source code — components, pages, layouts, styles, and copy
+2. Identify AI-generated patterns: cookie-cutter layouts, generic color palettes, template copy, missing micro-interactions, lack of visual hierarchy
+3. Classify each issue: Uncanny (obviously AI), Generic (template-feeling), or Polish (lacks craft)
+4. Create specific, actionable fixes grouped by priority: quick wins, component upgrades, layout changes, content polish, micro-interactions
+5. Check for accessibility issues (contrast, alt text, focus indicators, keyboard nav)
+6. Write the full report to `factory/artifacts/UI_POLISH_REPORT.md`
+7. Update its Status to `Complete` and Last Updated to today's date
+
+**Present the UI review in chat.** Highlight the top AI tells and the quickest wins.
+
+**Include the teaching summary:**
+
+> **What you learned:** We reviewed the UI for patterns that make it look AI-generated rather than professionally designed, and created a specific plan to fix them.
+>
+> **Important words:**
+> - **Visual hierarchy** — Arranging elements so the most important things stand out first, like a newspaper headline being bigger than article text
+> - **Typographic scale** — A system of proportional font sizes so headings, subheadings, and body text all feel related
+> - **Micro-interaction** — A small animation or visual response to a user action, like a button darkening on hover — these details make a UI feel alive
+> - **Design tokens** — Named values for colors, spacing, and fonts that are reused throughout the code, so changes are consistent
+>
+> **Why this phase matters:** Users form opinions about a product in seconds. If the UI looks generic or AI-generated, it undermines trust — even if the features work perfectly. Polish is what separates "it works" from "it feels right."
+>
+> **What happens next:** We will fold the UI fixes into our priority discussion alongside the functional gaps.
+
+Adapt the teaching summary to the user's actual project.
+
+**Ask for approval:**
+
+> Does this UI review capture the issues you see? Anything I missed or any fixes you disagree with?
+
+**Do not proceed until the user approves.**
+
+### Step 7: Discussion phase
+
+This is a back-and-forth conversation about priorities — including both functional gaps and UI polish items. Guide the user through the following topics **one at a time**. Do not dump all topics at once.
 
 **Topic 1: Priority sorting**
-Present the gaps grouped by type (Missing, Partial, Divergent). Ask: *"Which of these gaps matter most to you? Are there any that are must-haves for the next release?"*
+Present the functional gaps grouped by type (Missing, Partial, Divergent) and the UI polish items grouped by severity (Uncanny, Generic, Polish). Ask: *"Which of these gaps and UI issues matter most to you? Are there any that are must-haves for the next release?"*
 
 Wait for the user's response.
 
@@ -191,7 +230,7 @@ Wait for the user's response.
 
 **Do not proceed until the user approves.**
 
-### Step 7: Extract locked decisions from the codebase
+### Step 8: Extract locked decisions from the codebase
 
 Instead of running Presearch and Decide from scratch, extract the technology decisions from the audit:
 
@@ -209,12 +248,12 @@ Instead of running Presearch and Decide from scratch, extract the technology dec
 
 **Do not proceed until the user approves.**
 
-### Step 8: Run the Plan phase
+### Step 9: Run the Plan phase
 
 Follow the existing `/plan` protocol, but driven by the gap analysis:
 
-1. Read `factory/artifacts/GAP_ANALYSIS.md`, `factory/artifacts/LOCKED_DECISIONS.md`, and `factory/artifacts/PRD.md`
-2. Create 3–7 phases based on the gap analysis and the agreed priorities from the discussion
+1. Read `factory/artifacts/GAP_ANALYSIS.md`, `factory/artifacts/LOCKED_DECISIONS.md`, `factory/artifacts/PRD.md`, and `factory/artifacts/UI_POLISH_REPORT.md` (if it exists)
+2. Create 3–7 phases based on the gap analysis, UI polish items, and the agreed priorities from the discussion
 3. Each phase should reference which gaps it closes (by ID from the gap analysis table)
 4. Order phases by: user's stated priorities, dependencies between gaps, risk front-loading
 5. Define objective, deliverables, acceptance criteria, and risk notes for each phase
@@ -235,7 +274,7 @@ Follow the existing `/plan` protocol, but driven by the gap analysis:
 
 **Do not proceed until the user approves.**
 
-### Step 9: Hand off to implementation
+### Step 10: Hand off to implementation
 
 After plan approval, explain that the enhancement planning is complete:
 
@@ -243,6 +282,7 @@ After plan approval, explain that the enhancement planning is complete:
 >
 > - A clear picture of your existing codebase (audit)
 > - A detailed gap analysis showing exactly what needs to change
+> - A UI polish plan (if applicable) to make the interface look authentic and professional
 > - Agreed priorities from our discussion
 > - Technology decisions locked and documented
 > - A phased build plan targeting specific gaps
@@ -262,11 +302,12 @@ After plan approval, explain that the enhancement planning is complete:
 > - `/review` — Review implementation quality (after building)
 > - `/test-qa` — Check test coverage (after review)
 > - `/ship` — Prepare for deployment (after testing)
+> - `/polish-ui` — Re-run the UI authenticity review
 > - `/teach` — Explain any phase or concept at any time
 >
 > Ready to start building? Run `/implement` when you are ready!
 
-### Step 10: Update Learning Notes
+### Step 11: Update Learning Notes
 
 Append a summary entry to `factory/artifacts/LEARNING_NOTES.md` capturing the key concepts taught across all phases completed during this session.
 
