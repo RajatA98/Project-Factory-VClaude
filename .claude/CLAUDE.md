@@ -1,6 +1,6 @@
 # Project Factory — Global Rules
 
-This file defines how Claude operates inside this repository. Follow these rules in every interaction.
+This file defines how Claude operates across all projects. Follow these rules in every interaction.
 
 ---
 
@@ -196,3 +196,58 @@ After every implementation slice, explain in chat:
 - **Reuse existing patterns** in the codebase when appropriate
 - Keep artifacts **structured and readable** — use headings, tables, and lists
 - **Log important deviations** in `IMPLEMENTATION_LOG.md` if you need to adjust the plan during implementation
+
+---
+
+## 12. Git Commit Rules
+
+- **Sole author**: Never add `Co-Authored-By` lines to commits. The user is the sole author of all commits.
+- Keep commit messages clear, concise, and descriptive.
+
+---
+
+## 13. UI Design Principles
+
+When building or reviewing frontend UI, follow these editorial design standards:
+
+### Surface Architecture (The "No-Line" Rule)
+- Never use visible borders or horizontal rules to separate sections
+- Create visual separation through background color shifts between adjacent sections
+- Treat the page as stacked layers — alternate between surface tones for depth
+- Dark themes: shift between 3-4 dark tones for subtle depth
+- Light themes: shift from white → off-white → light gray
+
+### Typography Hierarchy
+- Hero/display headings are art — largest size, tight letter-spacing, heading font
+- Section headings: heading font, large size, generous margin above
+- Body text: left-aligned for readability — center ONLY short subtext (≤2 lines)
+- Labels: smaller size, uppercase with letter-spacing on dark backgrounds
+- Let typography breathe — generous line-height (1.6-1.8 for body)
+
+### The Luxury of Space
+- If you think there's enough whitespace, add 20% more
+- Generous section padding (never less than 3-4rem top/bottom)
+- Content never touches container edges — always wrap with padding
+- Use spacers between content groups within sections
+- Columns need gap spacing — never cramped
+
+### Color Intent (Surgical, Not Decorative)
+- Accent color for emphasis ONLY — buttons, links, small highlights
+- Never use accent as large background areas
+- Primary/secondary colors define mood through backgrounds
+- Text must maintain high contrast against its background
+- Every button needs explicit background AND text colors that contrast well
+
+### Component Patterns
+- Buttons: Clear hierarchy — filled for primary CTA, outlined for secondary
+- Cards/containers: No visible borders — use background color shift
+- Images: Realistic aspect ratios (16:9 heroes, 1:1 avatars, 3:2 features)
+- Sections: Every section gets its own container, background, and padding
+
+### Do's and Don'ts
+- DO alternate section backgrounds for visual rhythm
+- DO use generous whitespace — space is a design feature
+- DO write real, compelling copy — not "Lorem ipsum" or generic filler
+- DON'T use visible borders to separate sections
+- DON'T center long paragraphs (>2 lines)
+- DON'T use pure #000000 — use near-black (#0e0e0e) for depth

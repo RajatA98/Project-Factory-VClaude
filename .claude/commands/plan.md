@@ -15,7 +15,6 @@ You know what to build (PRD) and what tools to use (Locked Decisions). Now you n
 - Read `factory/artifacts/PRD.md`
 - Read `factory/artifacts/LOCKED_DECISIONS.md`
 - Verify both have Status `Complete`. If not, tell the user which phase to run first.
-- If `factory/artifacts/GAP_ANALYSIS.md` exists with Status `Complete`, read it as well. When a gap analysis is present, use its priorities and gap IDs to drive the build order — each plan phase should reference which gaps it closes.
 
 ## Output
 
