@@ -26,10 +26,14 @@ Greet the user and explain that this flow is designed for existing codebases. Sa
 > 4. **UI Polish Review** — If the project has a frontend, I will review it for AI-generated patterns and create a plan to make it look authentic and professional
 > 5. **Discussion** — We will talk through priorities (including UI fixes), decide what to tackle first, and agree on scope
 > 6. **Plan** — I will create a build plan based on the gaps we need to close
-> 7. **Implement** — I will build it piece by piece, with learning opportunities after each phase
-> 8. **Review** — I will check everything that was built for quality
-> 9. **Test-QA** — I will verify test coverage and identify gaps
-> 10. **Ship** — I will prepare deployment documentation and release checklist
+> 7. **Implement** — I will build it piece by piece with tests and integration tests
+> 8. **Security Check** — I will audit the code for security vulnerabilities
+> 9. **Debug Check** — I will stress test and hunt for bugs
+> 10. **Reflect** — I will walk you through everything that was built, the design decisions, and prepare you for interviews
+> 11. **Interview Practice** — I will quiz you with mock interview questions
+> 12. **Review** — I will check everything for quality
+> 13. **Test-QA** — I will verify test coverage and identify gaps
+> 14. **Ship** — I will prepare deployment documentation and release checklist
 >
 > The whole process is automatic — I will carry you from start to finish. You just approve each step and I keep going.
 >
@@ -100,22 +104,6 @@ Follow the full protocol from `/audit`:
 
 **Present the audit summary in chat** — explain what the codebase contains in plain English.
 
-**Include the teaching summary:**
-
-> **What you learned:** We audited your existing codebase — a systematic review of what technologies are used, what features exist, how the code is structured, and what shape it is in.
->
-> **Important words:**
-> - **Codebase audit** — A systematic examination of existing code to understand what is there and how it works
-> - **Tech stack** — The combination of programming languages, tools, and services used to build the product
-> - **Architecture** — How the different parts of the code are organized and how they communicate with each other
-> - **Technical debt** — Shortcuts or outdated parts of the code that work now but will cause problems later
->
-> **Why this phase matters:** You cannot plan improvements without first understanding what you already have. The audit gives us a clear picture of the starting point.
->
-> **What happens next:** I will compare this audit against your requirements to find the gaps — what is missing, what is partial, and what is already done.
-
-Adapt the teaching summary to the user's actual project.
-
 **Ask for approval:**
 
 > Does this audit capture your codebase correctly? Anything I missed or got wrong?
@@ -138,23 +126,6 @@ Follow the full protocol from `/gaps`:
 
 **Present the gap analysis in chat.** Show a clear summary: how many requirements are met, partially met, missing, or divergent.
 
-**Include the teaching summary:**
-
-> **What you learned:** We compared your requirements against the existing code and produced a gap analysis — a clear list of what work is needed.
->
-> **Important words:**
-> - **Gap analysis** — Comparing what you have against what you need, to identify the differences
-> - **Met** — A requirement that the existing code already satisfies
-> - **Partial** — A requirement that is started but not complete
-> - **Missing** — A requirement with no existing code at all
-> - **Divergent** — Code that exists but does something different from what the requirement specifies
->
-> **Why this phase matters:** Instead of guessing what to build, the gap analysis gives you an exact list of work. This prevents wasted effort on things that already work and ensures nothing important is missed.
->
-> **What happens next:** We will discuss priorities — which gaps to tackle first, what to defer, and what order makes sense.
-
-Adapt the teaching summary to the user's actual project.
-
 **Ask for approval:**
 
 > Does this gap analysis look right? Any requirements I misread or gaps I missed?
@@ -176,22 +147,6 @@ Follow the full protocol from `/polish-ui`:
 7. Update its Status to `Complete` and Last Updated to today's date
 
 **Present the UI review in chat.** Highlight the top AI tells and the quickest wins.
-
-**Include the teaching summary:**
-
-> **What you learned:** We reviewed the UI for patterns that make it look AI-generated rather than professionally designed, and created a specific plan to fix them.
->
-> **Important words:**
-> - **Visual hierarchy** — Arranging elements so the most important things stand out first, like a newspaper headline being bigger than article text
-> - **Typographic scale** — A system of proportional font sizes so headings, subheadings, and body text all feel related
-> - **Micro-interaction** — A small animation or visual response to a user action, like a button darkening on hover — these details make a UI feel alive
-> - **Design tokens** — Named values for colors, spacing, and fonts that are reused throughout the code, so changes are consistent
->
-> **Why this phase matters:** Users form opinions about a product in seconds. If the UI looks generic or AI-generated, it undermines trust — even if the features work perfectly. Polish is what separates "it works" from "it feels right."
->
-> **What happens next:** We will fold the UI fixes into our priority discussion alongside the functional gaps.
-
-Adapt the teaching summary to the user's actual project.
 
 **Ask for approval:**
 
@@ -267,11 +222,15 @@ Follow the existing `/plan` protocol, but driven by the gap analysis:
 
 **Present the plan in chat.** Explain the build order and what each phase produces.
 
-**Include the teaching summary:**
-- What you learned (what a gap-driven build plan looks like)
-- Important words (build order, milestone, acceptance criteria, dependencies)
-- Why this phase matters (a clear plan prevents getting lost during building)
-- What happens next (implementation using TDD)
+**Generate the cross-AI review file** following `/plan` Step 6 — create `factory/artifacts/PLAN_FOR_REVIEW.md` with full context (problem summary/PRD, gap analysis, locked decisions, and the project plan) so the user can send it to another AI for review before implementation begins.
+
+**Present the file and wait:**
+
+> I have generated `factory/artifacts/PLAN_FOR_REVIEW.md` — a self-contained file you can send to another AI (like GPT) for a second opinion on the build plan. Copy its contents, send it to the other AI, and paste the refined version back here. If you want to skip this step, say "skip."
+
+**Wait for the user to paste the refined plan or say "skip."**
+
+If the user pastes a refined version, follow `/plan` Step 7 — compare, summarize differences, ask which changes to accept, and update `factory/artifacts/PROJECT_PLAN.md`.
 
 **Ask for approval:**
 
@@ -286,14 +245,14 @@ After plan approval, transition directly into implementation. Do not stop and as
 > Planning is complete! Now I will start building. Implementation will happen in small pieces called "slices." For each slice, I will:
 > 1. Write tests first (what the code should do)
 > 2. Write the code to make the tests pass
-> 3. Explain what was built and why
+> 3. Run integration tests after each phase completes
 > 4. Check in with you before moving to the next slice
 
 Follow the full protocol from `/implement`:
 
 1. Read `factory/artifacts/PROJECT_PLAN.md` and `factory/artifacts/LOCKED_DECISIONS.md`
 2. Pick up the first incomplete phase from the plan
-3. For each slice within the phase, follow the 7-step TDD protocol:
+3. For each slice within the phase, follow the TDD protocol:
    - Restate the slice
    - Define expected behavior
    - Write tests first
@@ -301,30 +260,92 @@ Follow the full protocol from `/implement`:
    - Implement the smallest correct solution
    - Summarize what changed
    - List known issues
-4. Update `factory/artifacts/IMPLEMENTATION_LOG.md` after each slice
-5. After each slice, explain what was built, why, what files changed, and how tests relate
+4. **After completing all slices in a phase**, run integration tests to verify routing, wiring, cross-component communication, data flow, and no regressions
+5. Update `factory/artifacts/IMPLEMENTATION_LOG.md` after each slice (include integration test results after phase completion)
+6. After each slice, explain what was built, why, what files changed, and how tests relate
 
 **Ask for approval after each slice** before continuing to the next.
 
-**After completing each plan phase**, pause and offer the learning loop:
+**After completing each plan phase**, briefly notify progress:
 
-> Phase [N] is complete! Before we continue to the next phase, would you like to:
-> 1. **Continue** to the next phase
-> 2. **Learn** — I will explain what was just built in depth (`/teach-implement` style)
-> 3. **Interview** — Test your understanding with 3 mock interview questions
-> 4. **Review** — I will review the code quality of what was just built
->
-> Or just say "keep going" and I will continue building.
+> Phase [N]: [Name] is complete. Integration tests passing. [X of Y] phases done.
 
-If the user chooses to learn, follow the `/teach-implement` protocol. If they choose interview, follow the `/interview` protocol. If they choose review, follow the `/review` protocol. After any of these, ask if they want to continue to the next phase.
+**Ask if the user wants to continue to the next phase** before proceeding.
 
 **Repeat this cycle** for every phase in the plan until all phases are complete.
 
-### Step 11: Review
+### Step 11: Run Security Agent
 
-After all implementation phases are complete, automatically run the review:
+After ALL implementation phases are complete:
 
-> All implementation phases are done! Now let me review everything that was built.
+> All phases are built! Now let me run a security audit to check for vulnerabilities.
+
+Launch a security audit that:
+
+1. Scans source code for hardcoded secrets, API keys, passwords, and tokens
+2. Reviews authentication and authorization logic for vulnerabilities
+3. Checks for injection vulnerabilities (SQL injection, XSS, CSRF, command injection)
+4. Audits dependency versions for known vulnerabilities
+5. Checks for data exposure risks (logging sensitive data, overly permissive CORS)
+6. Verifies input validation and sanitization
+7. Writes findings to `factory/artifacts/SECURITY_REPORT.md`
+8. **Auto-fixes critical and high-severity issues**
+
+**Present findings to the user.** If critical issues were found and fixed, explain what was changed.
+
+### Step 12: Run Debug Agent
+
+After the security agent completes:
+
+> Now let me run a comprehensive debug check to catch any bugs.
+
+Launch a debug and stress test that:
+
+1. Runs the full test suite and reports results
+2. Stress tests key flows (large inputs, rapid requests, concurrent operations as applicable)
+3. Checks for memory leaks, unhandled promises, unclosed connections
+4. Verifies error handling paths
+5. Tests edge cases identified during planning
+6. Verifies all UI flows work end-to-end (if frontend exists)
+7. Writes findings to `factory/artifacts/DEBUG_REPORT.md`
+8. **Auto-fixes any bugs found**
+
+**Present findings to the user.**
+
+### Step 13: Run the Reflect phase
+
+After security and debug checks are complete:
+
+> Your enhancements are built, secured, and debugged. Now let me walk you through everything.
+
+Follow the full protocol from `/reflect`:
+
+1. **Tech Stack Refresh** — Walk through technology choices, why they were made or retained, how they played out
+2. **Tradeoffs Retrospective** — Which tradeoffs worked, which caused friction
+3. **System Design Concepts** — Patterns used, where in code, why, connected to interview questions
+4. **Product Thinking Concepts** — How the gap analysis and priorities shaped what was built
+5. **Interview/Demo Talking Points** — Pitch, walkthrough, likely questions, key metrics
+6. Write `factory/artifacts/REFLECTION.md`
+7. Update `factory/artifacts/LEARNING_NOTES.md`
+
+**Ask the user if they want to go deeper on any topic.**
+
+### Step 14: Interview Practice
+
+After reflect, run the `/interview` protocol — expanded to cover the full enhancement:
+
+- Ask **5–6 questions** covering the project: technical decisions, system design patterns, tradeoff reasoning, failure modes, security considerations
+- Ask questions **one at a time**
+- After all questions, provide feedback on each answer
+- Give an overall assessment
+
+**Wait for the user to complete all questions before proceeding.**
+
+### Step 15: Review
+
+After interview practice, run the review:
+
+> Now let me review the complete codebase for quality.
 
 Follow the full protocol from `/review`:
 
@@ -350,7 +371,7 @@ Follow the full protocol from `/review`:
 
 **Do not proceed until the user approves.**
 
-### Step 12: Test-QA
+### Step 16: Test-QA
 
 After review approval, automatically run test-QA:
 
@@ -382,7 +403,7 @@ Follow the full protocol from `/test-qa`:
 
 **Do not proceed until the user approves.**
 
-### Step 13: Ship
+### Step 17: Ship
 
 After test-QA approval, automatically run the ship phase:
 
@@ -410,7 +431,7 @@ Follow the full protocol from `/ship`:
 
 **Ask for approval before taking any deployment actions.**
 
-### Step 14: Wrap up
+### Step 18: Wrap up
 
 After all phases are complete:
 
@@ -420,7 +441,11 @@ After all phases are complete:
 > - Analyzed gaps against your requirements
 > - Reviewed and polished the UI (if applicable)
 > - Discussed priorities and agreed on scope
-> - Built and tested every phase of the plan
+> - Built every phase with TDD and integration tests
+> - Ran a security audit and fixed vulnerabilities
+> - Ran a debug check and stress tested the system
+> - Reflected on all decisions, patterns, and product thinking
+> - Practiced interview questions covering the project
 > - Reviewed code quality
 > - Verified test coverage
 > - Prepared deployment documentation
@@ -428,14 +453,15 @@ After all phases are complete:
 > You can re-run any phase at any time using the individual commands:
 > - `/audit`, `/gaps`, `/polish-ui` — Re-analyze the codebase
 > - `/implement` — Build additional slices
-> - `/teach-implement` — Explain any code in depth
+> - `/reflect` — Review decisions, patterns, and prepare for interviews
 > - `/interview` — Practice technical interview questions
 > - `/review` — Re-review code quality
 > - `/test-qa` — Re-check test coverage
 > - `/ship` — Update deployment documentation
 > - `/teach` — Explain any concept
+> - `/teach-implement` — Deep-dive into specific code
 
-### Step 15: Update Learning Notes
+### Step 19: Update Learning Notes
 
 Append a summary entry to `factory/artifacts/LEARNING_NOTES.md` capturing the key concepts taught across all phases completed during this session.
 
@@ -458,17 +484,23 @@ Unlike `/start-project` which hands off to `/implement`, this command continues 
 ### E. Approval checkpoints are mandatory
 After each major step (PRD collection, Audit, Gap Analysis, UI Polish, Discussion, Locked Decisions, Plan, each implementation slice, Review, Test-QA, and before any deployment actions), you must pause and ask for approval. Auto-continue does NOT mean skipping approvals — it means the user does not have to remember which command to run next.
 
-### F. Offer the learning loop after each implementation phase
-After completing each plan phase during implementation, offer the user the choice to continue, learn (`/teach-implement`), interview (`/interview`), or review. This keeps learning integrated into the build process.
+### F. Teaching happens after implementation
+All structured teaching is deferred to the Reflect phase (Step 13) after implementation, security, and debug checks are complete. Do NOT include teaching summaries during pre-implementation phases (Audit, Gap Analysis, UI Polish, Discussion, Plan) or during implementation. The user can ask questions at any time, but proactive teaching waits until Reflect. Post-implementation phases (Review, Test-QA, Ship) still include teaching summaries.
 
-### G. Teaching summaries are mandatory
-After Audit, Gap Analysis, UI Polish, Review, Test-QA, and Ship, include: What you learned, Important words, Why this phase matters, What happens next. Adapt these to the user's actual project — do not use generic text.
+### G. Cross-AI review loop for Plan
+After the Plan step, generate a self-contained review file (`PLAN_FOR_REVIEW.md`) and wait for the user to send it to another AI and paste back the refined version. If the user says "skip," proceed without the review.
 
 ### H. The discussion must be a conversation
 Step 7 (Discussion) must be interactive — ask one topic at a time, listen to responses, adapt. Do not dump all priority questions at once.
 
 ### I. Point to supporting commands
-When relevant, mention that the user can run `/audit`, `/gaps`, `/polish-ui`, or any other command independently to re-run specific steps.
+When relevant, mention that the user can run `/audit`, `/gaps`, `/polish-ui`, `/reflect`, or any other command independently to re-run specific steps.
+
+### J. Security and debug agents are mandatory
+After all implementation phases are complete, security and debug agents must run before proceeding to the Reflect phase. If critical issues are found, fix them before teaching.
+
+### K. Integration tests must pass after each phase
+After completing all slices in a plan phase, integration tests must pass before moving to the next phase. If they fail, debug and fix before proceeding.
 
 ---
 

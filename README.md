@@ -10,12 +10,19 @@ This is not a software product. It is a **workflow repo** meant to be used direc
 
 ## How to Use
 
+### New Projects
+
 1. Open this repo in Claude Code
 2. Run `/start-project` and describe your idea
 3. Claude guides you through each phase automatically — explaining, teaching, and asking for approval at every step
-4. Use `/teach` at any time to get explanations
 
 > `/start-project` is the recommended entry point. It walks you through the full pipeline. Individual phase commands are available for re-running specific phases or advanced use.
+
+### Existing Codebases
+
+1. Open your project in Claude Code (with this repo's commands available)
+2. Run `/enhance-project`
+3. Claude audits your codebase, compares it against requirements, discusses priorities, and creates a gap-driven plan
 
 ## Pipeline Phases
 
@@ -36,28 +43,73 @@ This is not a software product. It is a **workflow repo** meant to be used direc
 | Command | Purpose |
 |---------|---------|
 | `/teach` | Explain the current phase to a complete beginner |
-| `/teach-implement` | Explain code and implementation details |
+| `/teach-implement` | Explain code and implementation details (interview-level depth) |
+| `/interview` | Mock interview with 3 questions based on what was built, with feedback |
+
+### Enhancement Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/audit` | Analyze an existing codebase (technology, features, quality) |
+| `/gaps` | Compare PRD requirements against audited codebase |
+| `/polish-ui` | Review frontend for AI-generated patterns and create an authenticity improvement plan |
+
+### Specialized Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/arch-docs` | Generate architecture documentation, decision logs, and privacy analysis |
+| `/golden-evals-architect` | Create golden evaluation test suites for AI agents |
+| `/labeled-scenarios` | Generate labeled scenario coverage maps |
+| `/replay-harness` | Design replay harnesses and Stage 3 evaluation frameworks |
+| `/rubric-evals` | Build scoring rubrics and Stage 4 quality evaluation |
 
 ## Recommended Flow
 
-Interleave learning with each phase:
+### New Projects
 
 ```
-/understand → /teach → /prd → /teach → /presearch → /teach → /decide → /teach
-→ /plan → /teach → /implement → /teach-implement → /review → /teach
-→ /test-qa → /teach → /ship → /teach
+/start-project → (Understand, PRD, Presearch, Decide, Plan)
+  → /implement → /teach-implement → /interview
+  → /review → /teach → /test-qa → /teach → /ship → /teach
+```
+
+### Existing Codebases
+
+```
+/enhance-project → (Audit, Gaps, Discussion, Plan)
+  → /implement → /teach-implement → /interview
+  → /review → /teach → /test-qa → /teach → /ship → /teach
 ```
 
 ## Artifacts
 
 All pipeline outputs are stored in `factory/artifacts/`. These files are the source of truth for the workflow — each phase reads from previous artifacts and writes its own.
 
+| Artifact | Written By |
+|----------|-----------|
+| `PROBLEM_SUMMARY.md` | /understand |
+| `PRD.md` | /prd |
+| `PRESEARCH.md` | /presearch |
+| `LOCKED_DECISIONS.md` | /decide |
+| `PROJECT_PLAN.md` | /plan |
+| `IMPLEMENTATION_LOG.md` | /implement |
+| `REVIEW_REPORT.md` | /review |
+| `TEST_REPORT.md` | /test-qa |
+| `ENV_SETUP.md` | /ship |
+| `DEPLOYMENT.md` | /ship |
+| `RELEASE.md` | /ship |
+| `CODEBASE_AUDIT.md` | /audit, /enhance-project |
+| `GAP_ANALYSIS.md` | /gaps, /enhance-project |
+| `UI_POLISH_REPORT.md` | /polish-ui, /enhance-project |
+| `LEARNING_NOTES.md` | /teach, /teach-implement |
+
 ## Structure
 
 ```
 .claude/
   CLAUDE.md              # Global rules for Claude
-  commands/              # Pipeline command files (11 commands)
+  commands/              # Pipeline command files (22 commands)
 factory/
-  artifacts/             # Pipeline state and outputs (12 artifacts)
+  artifacts/             # Pipeline state and outputs (15 artifacts)
 ```

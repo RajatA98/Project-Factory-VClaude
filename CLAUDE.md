@@ -20,7 +20,7 @@ Project Factory is a **skills pipeline repo** for Claude Code. It contains comma
 
 Run `/start-project` to begin. It guides you through the entire pipeline automatically with explanations and approval at every step.
 
-Individual phase commands (`/understand`, `/prd`, `/presearch`, `/decide`, `/plan`, `/implement`, `/review`, `/test-qa`, `/ship`) are available for re-running specific phases or advanced use. `/teach`, `/teach-implement`, and `/interview` can be used at any time for learning.
+Individual phase commands (`/understand`, `/prd`, `/presearch`, `/decide`, `/plan`, `/implement`, `/review`, `/test-qa`, `/ship`) are available for re-running specific phases or advanced use. `/teach`, `/teach-implement`, `/reflect`, and `/interview` can be used at any time for learning.
 
 For existing codebases, run `/enhance-project`. It audits your code, compares it against requirements, and creates a gap-driven plan. `/audit` and `/gaps` can also be run independently.
 

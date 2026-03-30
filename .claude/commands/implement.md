@@ -64,7 +64,20 @@ Write the minimum code needed to make the tests pass. Follow the locked decision
 
 Run the tests. Confirm they pass. If they fail, debug and fix. Do not move on until the slice is verified.
 
-### Step 7: Update the Implementation Log
+### Step 7: Run integration tests after phase completion
+
+After all slices within a project plan phase are complete (not after every individual slice — only when a full phase is done):
+
+1. **Run integration tests** that verify:
+   - **Routing and wiring** — All endpoints, pages, or routes are reachable and connected correctly
+   - **Cross-component communication** — Components that depend on each other work together (e.g., frontend calls backend, backend reads from database)
+   - **Data flow** — Data created in one part of the system is correctly accessible in another
+   - **No regressions** — Previously completed phases still work after the new phase is added
+
+2. If integration tests fail, debug and fix before proceeding to the next phase
+3. Log integration test results in the implementation log entry
+
+### Step 8: Update the Implementation Log
 
 Append a new entry to `factory/artifacts/IMPLEMENTATION_LOG.md` with:
 
@@ -76,10 +89,11 @@ Append a new entry to `factory/artifacts/IMPLEMENTATION_LOG.md` with:
 - **Tests / Validation Targets:** [What tests were written or what validation was defined]
 - **Files Changed:** [List of files created or modified]
 - **Implementation Summary:** [What was actually built, in plain language]
+- **Integration Test Results:** [What integration tests were run after phase completion and their results — leave blank if this is a mid-phase slice]
 - **Known Issues:** [Any bugs, gaps, or follow-ups identified]
 ```
 
-### Step 8: Explain in chat
+### Step 9: Explain in chat
 
 Provide a beginner-friendly explanation:
 - **What was built:** (plain English)
@@ -87,7 +101,7 @@ Provide a beginner-friendly explanation:
 - **What the tests check:** (plain English)
 - **What this means for the project:** (how it connects to the plan)
 
-### Step 9: Ask about next steps
+### Step 10: Ask about next steps
 
 Ask the user: *"This slice is complete. Would you like to continue to the next slice, review what was built, or take a break?"*
 
@@ -105,6 +119,7 @@ Do not automatically start the next slice — wait for the user.
 - Do not leave the implementation log un-updated
 - Do not assume the user understands code — explain as you go
 - Do not say "just" when describing implementation steps
+- Do not skip integration tests after completing a phase — these catch wiring issues that unit tests miss
 
 ---
 
@@ -117,3 +132,4 @@ Concepts to explain naturally during implementation:
 - **Slice** — A small, self-contained piece of work. Building in slices means you always have something working, and mistakes are easier to find.
 - **Test** — Code that checks if other code works correctly. Like a quality inspector on an assembly line.
 - **Debugging** — Finding and fixing mistakes in code. When a test fails, you debug to figure out why.
+- **Integration test** — A test that checks whether multiple parts of the system work together correctly. Unit tests check individual pieces; integration tests check the connections between pieces. Like testing that the plumbing connects to the faucet, not just that the faucet handle turns.
